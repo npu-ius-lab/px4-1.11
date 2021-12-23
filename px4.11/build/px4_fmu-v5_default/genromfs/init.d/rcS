@@ -1,0 +1,377 @@
+set +e
+set AUTOCNF no
+set AUX_MODE pwm
+set DATAMAN_OPT ""
+set FAILSAFE none
+set FAILSAFE_AUX none
+set FCONFIG /fs/microsd/etc/config.txt
+set FEXTRAS /fs/microsd/etc/extras.txt
+set FMU_MODE pwm
+set FRC /fs/microsd/etc/rc.txt
+set IOFW "/etc/extras/px4_io-v2_default.bin"
+set IO_PRESENT no
+set LOG_FILE /fs/microsd/bootlog.txt
+set LOGGER_ARGS ""
+set LOGGER_BUF  14
+set MAV_TYPE none
+set MIXER none
+set MIXER_AUX none
+set MIXER_FILE none
+set MK_MODE none
+set MKBLCTRL_ARG ""
+set OUTPUT_MODE none
+set PARAM_FILE /fs/microsd/params
+set PWM_AUX_DISARMED p:PWM_AUX_DISARMED
+set PWM_AUX_MAX p:PWM_AUX_MAX
+set PWM_AUX_MIN p:PWM_AUX_MIN
+set PWM_AUX_OUT none
+set PWM_AUX_RATE p:PWM_AUX_RATE
+set PWM_DISARMED p:PWM_DISARMED
+set PWM_MAX p:PWM_MAX
+set PWM_MIN p:PWM_MIN
+set PWM_OUT none
+set PWM_RATE p:PWM_RATE
+set RC_INPUT_ARGS ""
+set SDCARD_MIXERS_PATH /fs/microsd/etc/mixers
+set STARTUP_TUNE 1
+set USE_IO no
+set VEHICLE_TYPE none
+set PARAM_DEFAULTS_VER 1
+mount -t procfs /proc
+sercon
+ver all
+uorb start
+if mount -t vfat /dev/mmcsd0 /fs/microsd
+then
+if hardfault_log check
+then
+set STARTUP_TUNE 2
+if hardfault_log commit
+then
+hardfault_log reset
+fi
+fi
+if [ ! -f "/fs/microsd/.metadata_never_index" ]; then
+cat > /fs/microsd/.metadata_never_index
+fi
+if [ ! -f "/fs/microsd/.Trashes" ]; then
+cat > /fs/microsd/.Trashes
+fi
+if [ ! -d "/fs/microsd/.fseventsd" ]; then
+mkdir /fs/microsd/.fseventsd
+fi
+if [ ! -f "/fs/microsd/.fseventsd/no_log" ]; then
+cat > /fs/microsd/.fseventsd/no_log
+fi
+if [ ! -f "/fs/microsd/.Trash-1000" ]; then
+cat > /fs/microsd/.Trash-1000
+fi
+else
+set STARTUP_TUNE 16
+if mkfatfs /dev/mmcsd0
+then
+if mount -t vfat /dev/mmcsd0 /fs/microsd
+then
+echo "INFO [init] card formatted"
+else
+set STARTUP_TUNE 17
+echo "ERROR [init] format failed"
+set LOG_FILE /dev/null
+fi
+else
+set LOG_FILE /dev/null
+fi
+fi
+if [ -f $FRC ]
+then
+sh $FRC
+else
+if mtd start
+then
+set PARAM_FILE /fs/mtd_params
+fi
+param select $PARAM_FILE
+if ! param load
+then
+param reset
+fi
+if param greater SYS_AUTOCONFIG 0
+then
+if param compare SYS_AUTOCONFIG 1
+then
+param reset_nostart RC* COM_FLTMODE* LND_FLIGHT_T_* TC_* CAL_ACC* CAL_GYRO* COM_FLIGHT_UUID
+fi
+set AUTOCNF yes
+fi
+param compare CBRK_BUZZER 782090
+if [ $? != 0 -o $STARTUP_TUNE != 1 ]
+then
+tune_control play -t $STARTUP_TUNE
+fi
+set BOARD_RC_DEFAULTS /etc/init.d/rc.board_defaults
+if [ -f $BOARD_RC_DEFAULTS ]
+then
+echo "Board defaults: ${BOARD_RC_DEFAULTS}"
+sh $BOARD_RC_DEFAULTS
+fi
+unset BOARD_RC_DEFAULTS
+dataman start $DATAMAN_OPT
+send_event start
+load_mon start
+rgbled start -X
+rgbled_ncp5623c start -X
+if param greater LIGHT_EN_BLINKM 0
+then
+if blinkm start -X
+then
+blinkm systemstate
+fi
+fi
+tone_alarm start
+if ! param compare SYS_AUTOSTART 0
+then
+sh /etc/init.d/rc.autostart
+fi
+if [ -f $FCONFIG ]
+then
+echo "Custom: ${FCONFIG}"
+sh $FCONFIG
+fi
+if [ $AUTOCNF = yes ]
+then
+param set SYS_AUTOCONFIG 0
+fi
+if [ -f $IOFW ]
+then
+if ver hwtypecmp V540 V560
+then
+param set SYS_USE_IO 0
+else
+if px4io checkcrc ${IOFW}
+then
+set IO_PRESENT yes
+else
+tune_control play -t 18
+if px4io start
+then
+if ! px4io safety_on
+then
+px4io stop
+fi
+fi
+if px4io forceupdate 14662 ${IOFW}
+then
+usleep 10000
+tune_control stop
+if px4io checkcrc ${IOFW}
+then
+echo "PX4IO CRC OK after updating" >> $LOG_FILE
+tune_control play -t 19
+set IO_PRESENT yes
+fi
+fi
+if [ $IO_PRESENT = no ]
+then
+echo "PX4IO update failed" >> $LOG_FILE
+tune_control play -t 20
+fi
+fi
+fi
+fi
+if param compare -s SYS_USE_IO 1
+then
+set USE_IO yes
+fi
+if [ $USE_IO = yes -a $IO_PRESENT = no ]
+then
+echo "PX4IO not found" >> $LOG_FILE
+tune_control play -t 2
+fi
+rc_update start
+if param greater SYS_HITL 0
+then
+set OUTPUT_MODE hil
+sensors start -h
+commander start -h
+param set GPS_1_CONFIG 0
+if param compare SYS_HITL 2
+then
+sih start
+fi
+else
+set BOARD_RC_SENSORS /etc/init.d/rc.board_sensors
+if [ -f $BOARD_RC_SENSORS ]
+then
+echo "Board sensors: ${BOARD_RC_SENSORS}"
+sh $BOARD_RC_SENSORS
+fi
+unset BOARD_RC_SENSORS
+sh /etc/init.d/rc.sensors
+if param compare -s BAT1_SOURCE 2
+then
+esc_battery start
+fi
+if ! param compare BAT1_SOURCE 1
+then
+battery_status start
+fi
+commander start
+fi
+if param compare -s SENS_EN_LL40LS 1
+then
+set FMU_MODE pwm4
+set AUX_MODE pwm4
+fi
+if param compare FD_EXT_ATS_EN 1
+then
+set FMU_MODE pwm4
+set AUX_MODE pwm4
+fi
+if param greater TRIG_MODE 0
+then
+if param compare TRIG_PINS 56
+then
+set FMU_MODE pwm4
+set AUX_MODE pwm4
+else
+if param compare TRIG_PINS 78
+then
+set FMU_MODE pwm6
+set AUX_MODE pwm6
+else
+set FMU_MODE none
+set AUX_MODE none
+fi
+fi
+camera_trigger start
+camera_feedback start
+fi
+if param greater -s UAVCAN_ENABLE 0
+then
+if uavcan start
+then
+if param greater UAVCAN_ENABLE 1
+then
+uavcan start fw
+if param greater UAVCAN_ENABLE 2
+then
+set OUTPUT_MODE uavcan_esc
+fi
+fi
+else
+tune_control play -t 2
+fi
+fi
+set BOARD_RC_MAVLINK /etc/init.d/rc.board_mavlink
+if [ -f $BOARD_RC_MAVLINK ]
+then
+echo "Board extras: ${BOARD_RC_MAVLINK}"
+sh $BOARD_RC_MAVLINK
+fi
+unset BOARD_RC_MAVLINK
+sh /etc/init.d/rc.serial
+if [ $IO_PRESENT = no ]
+then
+rc_input start $RC_INPUT_ARGS
+fi
+sh /etc/init.d/rc.vehicle_setup
+if param greater -s CAM_CAP_FBACK 0
+then
+if camera_capture start
+then
+camera_capture on
+fi
+fi
+navigator start
+sh /etc/init.d/rc.thermal_cal
+if ! param compare MNT_MODE_IN -1
+then
+vmount start
+fi
+if param compare SENS_EN_PX4FLOW 1
+then
+px4flow start -X
+fi
+if param greater TEL_BST_EN 0
+then
+bst start -X
+fi
+set BOARD_RC_EXTRAS /etc/init.d/rc.board_extras
+if [ -f $BOARD_RC_EXTRAS ]
+then
+echo "Board extras: ${BOARD_RC_EXTRAS}"
+sh $BOARD_RC_EXTRAS
+fi
+unset BOARD_RC_EXTRAS
+if [ -f $FEXTRAS ]
+then
+echo "Addons script: ${FEXTRAS}"
+sh $FEXTRAS
+fi
+sh /etc/init.d/rc.logging
+if ! param compare SYS_AUTOSTART 0
+then
+sh /etc/init.d/rc.autostart.post
+fi
+if ! param compare SYS_PARAM_VER ${PARAM_DEFAULTS_VER}
+then
+echo "Switched to different parameter version. Resetting parameters."
+param set SYS_PARAM_VER ${PARAM_DEFAULTS_VER}
+param set SYS_AUTOCONFIG 2
+param save
+reboot
+fi
+fi
+unset AUTOCNF
+unset AUX_MODE
+unset DATAMAN_OPT
+unset FAILSAFE
+unset FAILSAFE_AUX
+unset FCONFIG
+unset FEXTRAS
+unset FMU_MODE
+unset FRC
+unset IO_PRESENT
+unset IOFW
+unset LOG_FILE
+unset LOGGER_ARGS
+unset LOGGER_BUF
+unset MAV_TYPE
+unset MIXER
+unset MIXER_AUX
+unset MIXER_FILE
+unset MK_MODE
+unset MKBLCTRL_ARG
+unset OUTPUT_MODE
+unset PARAM_DEFAULTS_VER
+unset PARAM_FILE
+unset PWM_AUX_DISARMED
+unset PWM_AUX_MAX
+unset PWM_AUX_MIN
+unset PWM_AUX_OUT
+unset PWM_AUX_RATE
+unset PWM_DISARMED
+unset PWM_MAX
+unset PWM_MIN
+unset PWM_OUT
+unset PWM_RATE
+unset RC_INPUT_ARGS
+unset SDCARD_MIXERS_PATH
+unset STARTUP_TUNE
+unset USE_IO
+unset VEHICLE_TYPE
+mavlink boot_complete
+mavlink stream -d /dev/ttyS2 -s HIGHRES_IMU -r 200
+mavlink stream -d /dev/ttyS2 -s BATTERY_STATUS -r 100
+mavlink stream -d /dev/ttyS2 -s ATTITUDE_QUATERNION -r 200
+mavlink stream -d /dev/ttyS2 -s RC_CHANNELS -r 110
+mavlink stream -d /dev/ttyS2 -s ATTITUDE -r 0
+mavlink stream -d /dev/ttyS2 -s ACTUATOR_CONTROL_TARGET -r 0
+mavlink stream -d /dev/ttyS2 -s ATTITUDE_TARGET -r 0
+mavlink stream -d /dev/ttyS2 -s LOCAL_POSITION_NED -r 0
+mavlink stream -d /dev/ttyS2 -s ODOMETRY -r 0
+mavlink stream -d /dev/ttyS2 -s SCALED_IMU -r 0
+mavlink stream -d /dev/ttyS2 -s SCALED_IMU2 -r 0
+mavlink stream -d /dev/ttyS2 -s SCALED_IMU3 -r 0
+mavlink stream -d /dev/ttyS2 -s SERVO_OUTPUT_RAW -r 0
+mavlink stream -d /dev/ttyS2 -s VFR_UHD -r 0

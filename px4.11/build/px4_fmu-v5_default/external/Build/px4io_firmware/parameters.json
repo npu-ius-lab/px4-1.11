@@ -1,0 +1,1273 @@
+{
+  "parameters": [
+    {
+      "default": "75",
+      "type": "Int32",
+      "max": "250",
+      "min": "10",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Speed controller bandwidth",
+      "longDesc": "Speed controller bandwidth, in Hz. Higher values result in faster speed and current rise times, but may result in overshoot and higher current consumption. For fixed-wing aircraft, this value should be less than 50 Hz; for multirotors, values up to 100 Hz may provide improvements in responsiveness.",
+      "name": "ctl_bw",
+      "units": "Hertz"
+    },
+    {
+      "default": "1",
+      "type": "Int32",
+      "max": "1",
+      "min": "0",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Reverse direction",
+      "longDesc": "Motor spin direction as detected during initial enumeration. Use 0 or 1 to reverse direction.",
+      "name": "ctl_dir"
+    },
+    {
+      "default": "1",
+      "type": "Float",
+      "max": "1.00",
+      "min": "0.00",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Speed (RPM) controller gain",
+      "longDesc": "Speed (RPM) controller gain. Determines controller\n            aggressiveness; units are amp-seconds per radian. Systems with\n            higher rotational inertia (large props) will need gain increased;\n            systems with low rotational inertia (small props) may need gain\n            decreased. Higher values result in faster response, but may result\n            in oscillation and excessive overshoot. Lower values result in a\n            slower, smoother response.",
+      "decimalPlaces": "3",
+      "name": "ctl_gain",
+      "units": "amp-seconds per radian"
+    },
+    {
+      "default": "3.5",
+      "type": "Float",
+      "max": "100.0",
+      "min": "0.0",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Idle speed (e Hz)",
+      "longDesc": "Idle speed (e Hz)",
+      "decimalPlaces": "3",
+      "name": "ctl_hz_idle",
+      "units": "Hertz"
+    },
+    {
+      "default": "25",
+      "type": "Int32",
+      "max": "1000",
+      "min": "5",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Spin-up rate (e Hz/s)",
+      "longDesc": "Spin-up rate (e Hz/s)",
+      "name": "ctl_start_rate",
+      "units": "Hz/s"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "15",
+      "min": "0",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Index of this ESC in throttle command messages.",
+      "longDesc": "Index of this ESC in throttle command messages.",
+      "name": "esc_index",
+      "units": "Index"
+    },
+    {
+      "default": "20034",
+      "type": "Int32",
+      "max": "1000000",
+      "min": "1",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Extended status ID",
+      "longDesc": "Extended status ID",
+      "name": "id_ext_status"
+    },
+    {
+      "default": "50000",
+      "type": "Int32",
+      "max": "1000000",
+      "min": "0",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Extended status interval (\u00b5s)",
+      "longDesc": "Extended status interval (\u00b5s)",
+      "name": "int_ext_status",
+      "units": "\u00b5s"
+    },
+    {
+      "default": "50000",
+      "type": "Int32",
+      "max": "1000000",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "ESC status interval (\u00b5s)",
+      "longDesc": "ESC status interval (\u00b5s)",
+      "name": "int_status",
+      "units": "\u00b5s"
+    },
+    {
+      "default": "12",
+      "type": "Float",
+      "max": "80",
+      "min": "1",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Motor current limit in amps",
+      "longDesc": "Motor current limit in amps. This determines the maximum\n            current controller setpoint, as well as the maximum allowable\n            current setpoint slew rate. This value should generally be set to\n            the continuous current rating listed in the motor\u2019s specification\n            sheet, or set equal to the motor\u2019s specified continuous power\n            divided by the motor voltage limit.",
+      "decimalPlaces": "3",
+      "name": "mot_i_max",
+      "units": "Amps"
+    },
+    {
+      "default": "2300",
+      "type": "Int32",
+      "max": "4000",
+      "min": "0",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Motor Kv in RPM per volt",
+      "longDesc": "Motor Kv in RPM per volt. This can be taken from the motor\u2019s\n            specification sheet; accuracy will help control performance but\n            some deviation from the specified value is acceptable.",
+      "name": "mot_kv",
+      "units": "RPM/v"
+    },
+    {
+      "default": "0.0",
+      "type": "Float",
+      "units": "henries",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "READ ONLY: Motor inductance in henries.",
+      "longDesc": "READ ONLY: Motor inductance in henries. This is measured on start-up.",
+      "decimalPlaces": "3",
+      "name": "mot_ls"
+    },
+    {
+      "default": "14",
+      "type": "Int32",
+      "max": "40",
+      "min": "2",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Number of motor poles.",
+      "longDesc": "Number of motor poles. Used to convert mechanical speeds to\n            electrical speeds. This number should be taken from the motor\u2019s\n            specification sheet.",
+      "name": "mot_num_poles",
+      "units": "Poles"
+    },
+    {
+      "default": "0.0",
+      "type": "Float",
+      "units": "Ohms",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "READ ONLY: Motor resistance in ohms",
+      "longDesc": "READ ONLY: Motor resistance in ohms. This is measured on start-up. When\n            tuning a new motor, check that this value is approximately equal\n            to the value shown in the motor\u2019s specification sheet.",
+      "decimalPlaces": "3",
+      "name": "mot_rs"
+    },
+    {
+      "default": "0.5",
+      "type": "Float",
+      "max": "1.00",
+      "min": "0.01",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Acceleration limit (V)",
+      "longDesc": "Acceleration limit (V)",
+      "decimalPlaces": "3",
+      "name": "mot_v_accel",
+      "units": "Volts"
+    },
+    {
+      "default": "14.8",
+      "type": "Float",
+      "units": "Volts",
+      "min": "0",
+      "group": "UAVCAN Motor Parameters",
+      "shortDesc": "Motor voltage limit in volts",
+      "longDesc": "Motor voltage limit in volts. The current controller\u2019s\n            commanded voltage will never exceed this value. Note that this may\n            safely be above the nominal voltage of the motor; to determine the\n            actual motor voltage limit, divide the motor\u2019s rated power by the\n            motor current limit.",
+      "decimalPlaces": "3",
+      "name": "mot_v_max"
+    },
+    {
+      "default": "2",
+      "type": "Int32",
+      "max": "2",
+      "min": "0",
+      "group": "UAVCAN GNSS",
+      "shortDesc": "GNSS dynamic model",
+      "longDesc": "Dynamic model used in the GNSS positioning engine. 0 \u2013\n        Automotive, 1 \u2013 Sea, 2 \u2013 Airborne.\n      ",
+      "values": [
+        {
+          "value": "0",
+          "description": "Automotive"
+        },
+        {
+          "value": "1",
+          "description": "Sea"
+        },
+        {
+          "value": "2",
+          "description": "Airborne"
+        }
+      ],
+      "name": "gnss.dyn_model"
+    },
+    {
+      "default": "1",
+      "type": "Int32",
+      "max": "1",
+      "min": "0",
+      "group": "UAVCAN GNSS",
+      "shortDesc": "Broadcast old GNSS fix message",
+      "longDesc": "Broadcast the old (deprecated) GNSS fix message\n        uavcan.equipment.gnss.Fix alongside the new alternative\n        uavcan.equipment.gnss.Fix2. It is recommended to\n        disable this feature to reduce the CAN bus traffic.\n      ",
+      "values": [
+        {
+          "value": "0",
+          "description": "Fix2"
+        },
+        {
+          "value": "1",
+          "description": "Fix and Fix2"
+        }
+      ],
+      "name": "gnss.old_fix_msg"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "3",
+      "min": "0",
+      "group": "UAVCAN GNSS",
+      "shortDesc": "device health warning",
+      "longDesc": "Set the device health to Warning if the dimensionality of\n              the GNSS solution is less than this value. 3 for the full (3D)\n              solution, 2 for planar (2D) solution, 1 for time-only solution,\n              0 disables the feature.\n      ",
+      "values": [
+        {
+          "value": "0",
+          "description": "disables the feature"
+        },
+        {
+          "value": "1",
+          "description": "time-only solution"
+        },
+        {
+          "value": "2",
+          "description": "planar (2D) solution"
+        },
+        {
+          "value": "3",
+          "description": "full (3D) solution"
+        }
+      ],
+      "name": "gnss.warn_dimens"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "UAVCAN GNSS",
+      "shortDesc": "",
+      "longDesc": "Set the device health to Warning if the number of satellites\n        used in the GNSS solution is below this threshold. Zero\n        disables the feature\n      ",
+      "name": "gnss.warn_sats"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "1000000",
+      "min": "0",
+      "group": "UAVCAN GNSS",
+      "shortDesc": "",
+      "longDesc": "Set the device health to Warning if the number of satellites\n        used in the GNSS solution is below this threshold. Zero\n        disables the feature\n      ",
+      "name": "uavcan.pubp-pres",
+      "units": "microseconds"
+    },
+    {
+      "increment": "50",
+      "default": "-1.0",
+      "rebootRequired": "True",
+      "min": "-1.0",
+      "decimalPlaces": "0",
+      "longDesc": "Defines the capacity of battery 1 in mAh.",
+      "max": "100000",
+      "type": "Float",
+      "units": "mAh",
+      "group": "Battery Calibration",
+      "shortDesc": "Battery 1 capacity",
+      "name": "BAT1_CAPACITY"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Number of cells for battery 1",
+      "longDesc": "Defines the number of cells the attached battery consists of.",
+      "values": [
+        {
+          "value": "2",
+          "description": "2S Battery"
+        },
+        {
+          "value": "3",
+          "description": "3S Battery"
+        },
+        {
+          "value": "4",
+          "description": "4S Battery"
+        },
+        {
+          "value": "5",
+          "description": "5S Battery"
+        },
+        {
+          "value": "6",
+          "description": "6S Battery"
+        },
+        {
+          "value": "7",
+          "description": "7S Battery"
+        },
+        {
+          "value": "8",
+          "description": "8S Battery"
+        },
+        {
+          "value": "9",
+          "description": "9S Battery"
+        },
+        {
+          "value": "10",
+          "description": "10S Battery"
+        },
+        {
+          "value": "11",
+          "description": "11S Battery"
+        },
+        {
+          "value": "12",
+          "description": "12S Battery"
+        },
+        {
+          "value": "13",
+          "description": "13S Battery"
+        },
+        {
+          "value": "14",
+          "description": "14S Battery"
+        },
+        {
+          "value": "15",
+          "description": "15S Battery"
+        },
+        {
+          "value": "16",
+          "description": "16S Battery"
+        }
+      ],
+      "name": "BAT1_N_CELLS"
+    },
+    {
+      "increment": "0.01",
+      "default": "-1.0",
+      "rebootRequired": "True",
+      "min": "-1.0",
+      "decimalPlaces": "2",
+      "longDesc": "If non-negative, then this will be used in place of BAT1_V_LOAD_DROP for all calculations.",
+      "max": "0.2",
+      "type": "Float",
+      "units": "Ohm",
+      "group": "Battery Calibration",
+      "shortDesc": "Explicitly defines the per cell internal resistance for battery 1",
+      "name": "BAT1_R_INTERNAL"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Battery 1 monitoring source",
+      "longDesc": "This parameter controls the source of battery data. The value 'Power Module' means that measurements are expected to come from a power module. If the value is set to 'External' then the system expects to receive mavlink battery status messages. If the value is set to 'ESCs', the battery information are taken from the esc_status message. This requires the ESC to provide both voltage as well as current.",
+      "values": [
+        {
+          "value": "-1",
+          "description": "Disabled"
+        },
+        {
+          "value": "0",
+          "description": "Power Module"
+        },
+        {
+          "value": "1",
+          "description": "External"
+        },
+        {
+          "value": "2",
+          "description": "ESCs"
+        }
+      ],
+      "name": "BAT1_SOURCE"
+    },
+    {
+      "increment": "0.01",
+      "default": "4.05",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Full cell voltage (5C load)",
+      "longDesc": "Defines the voltage where a single cell of battery 1 is considered full under a mild load. This will never be the nominal voltage of 4.2V",
+      "decimalPlaces": "2",
+      "name": "BAT1_V_CHARGED"
+    },
+    {
+      "increment": "0.01",
+      "default": "3.5",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Empty cell voltage (5C load)",
+      "longDesc": "Defines the voltage where a single cell of battery 1 is considered empty. The voltage should be chosen before the steep dropoff to 2.8V. A typical lithium battery can only be discharged down to 10% before it drops off to a voltage level damaging the cells.",
+      "decimalPlaces": "2",
+      "name": "BAT1_V_EMPTY"
+    },
+    {
+      "increment": "0.01",
+      "default": "0.3",
+      "rebootRequired": "True",
+      "min": "0.07",
+      "decimalPlaces": "2",
+      "longDesc": "This implicitely defines the internal resistance to maximum current ratio for battery 1 and assumes linearity. A good value to use is the difference between the 5C and 20-25C load. Not used if BAT1_R_INTERNAL is set.",
+      "max": "0.5",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "shortDesc": "Voltage drop per cell on full throttle",
+      "name": "BAT1_V_LOAD_DROP"
+    },
+    {
+      "increment": "50",
+      "default": "-1.0",
+      "rebootRequired": "True",
+      "min": "-1.0",
+      "decimalPlaces": "0",
+      "longDesc": "Defines the capacity of battery 2 in mAh.",
+      "max": "100000",
+      "type": "Float",
+      "units": "mAh",
+      "group": "Battery Calibration",
+      "shortDesc": "Battery 2 capacity",
+      "name": "BAT2_CAPACITY"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Number of cells for battery 2",
+      "longDesc": "Defines the number of cells the attached battery consists of.",
+      "values": [
+        {
+          "value": "2",
+          "description": "2S Battery"
+        },
+        {
+          "value": "3",
+          "description": "3S Battery"
+        },
+        {
+          "value": "4",
+          "description": "4S Battery"
+        },
+        {
+          "value": "5",
+          "description": "5S Battery"
+        },
+        {
+          "value": "6",
+          "description": "6S Battery"
+        },
+        {
+          "value": "7",
+          "description": "7S Battery"
+        },
+        {
+          "value": "8",
+          "description": "8S Battery"
+        },
+        {
+          "value": "9",
+          "description": "9S Battery"
+        },
+        {
+          "value": "10",
+          "description": "10S Battery"
+        },
+        {
+          "value": "11",
+          "description": "11S Battery"
+        },
+        {
+          "value": "12",
+          "description": "12S Battery"
+        },
+        {
+          "value": "13",
+          "description": "13S Battery"
+        },
+        {
+          "value": "14",
+          "description": "14S Battery"
+        },
+        {
+          "value": "15",
+          "description": "15S Battery"
+        },
+        {
+          "value": "16",
+          "description": "16S Battery"
+        }
+      ],
+      "name": "BAT2_N_CELLS"
+    },
+    {
+      "increment": "0.01",
+      "default": "-1.0",
+      "rebootRequired": "True",
+      "min": "-1.0",
+      "decimalPlaces": "2",
+      "longDesc": "If non-negative, then this will be used in place of BAT2_V_LOAD_DROP for all calculations.",
+      "max": "0.2",
+      "type": "Float",
+      "units": "Ohm",
+      "group": "Battery Calibration",
+      "shortDesc": "Explicitly defines the per cell internal resistance for battery 2",
+      "name": "BAT2_R_INTERNAL"
+    },
+    {
+      "default": "-1",
+      "type": "Int32",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Battery 2 monitoring source",
+      "longDesc": "This parameter controls the source of battery data. The value 'Power Module' means that measurements are expected to come from a power module. If the value is set to 'External' then the system expects to receive mavlink battery status messages. If the value is set to 'ESCs', the battery information are taken from the esc_status message. This requires the ESC to provide both voltage as well as current.",
+      "values": [
+        {
+          "value": "-1",
+          "description": "Disabled"
+        },
+        {
+          "value": "0",
+          "description": "Power Module"
+        },
+        {
+          "value": "1",
+          "description": "External"
+        },
+        {
+          "value": "2",
+          "description": "ESCs"
+        }
+      ],
+      "name": "BAT2_SOURCE"
+    },
+    {
+      "increment": "0.01",
+      "default": "4.05",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Full cell voltage (5C load)",
+      "longDesc": "Defines the voltage where a single cell of battery 1 is considered full under a mild load. This will never be the nominal voltage of 4.2V",
+      "decimalPlaces": "2",
+      "name": "BAT2_V_CHARGED"
+    },
+    {
+      "increment": "0.01",
+      "default": "3.5",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "rebootRequired": "True",
+      "shortDesc": "Empty cell voltage (5C load)",
+      "longDesc": "Defines the voltage where a single cell of battery 1 is considered empty. The voltage should be chosen before the steep dropoff to 2.8V. A typical lithium battery can only be discharged down to 10% before it drops off to a voltage level damaging the cells.",
+      "decimalPlaces": "2",
+      "name": "BAT2_V_EMPTY"
+    },
+    {
+      "increment": "0.01",
+      "default": "0.3",
+      "rebootRequired": "True",
+      "min": "0.07",
+      "decimalPlaces": "2",
+      "longDesc": "This implicitely defines the internal resistance to maximum current ratio for battery 1 and assumes linearity. A good value to use is the difference between the 5C and 20-25C load. Not used if BAT2_R_INTERNAL is set.",
+      "max": "0.5",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "shortDesc": "Voltage drop per cell on full throttle",
+      "name": "BAT2_V_LOAD_DROP"
+    },
+    {
+      "increment": "50",
+      "default": "-1.0",
+      "rebootRequired": "true",
+      "min": "-1.0",
+      "decimalPlaces": "0",
+      "longDesc": "Defines the capacity of battery 1.",
+      "max": "100000",
+      "type": "Float",
+      "units": "mAh",
+      "group": "Battery Calibration",
+      "shortDesc": "This parameter is deprecated. Please use BAT1_CAPACITY instead",
+      "name": "BAT_CAPACITY"
+    },
+    {
+      "increment": "0.01",
+      "default": "0.07",
+      "rebootRequired": "true",
+      "min": "0.05",
+      "decimalPlaces": "2",
+      "longDesc": "Sets the threshold when the battery will be reported as critically low. This has to be lower than the low threshold. This threshold commonly will trigger RTL.",
+      "max": "0.25",
+      "type": "Float",
+      "units": "norm",
+      "group": "Battery Calibration",
+      "shortDesc": "Critical threshold",
+      "name": "BAT_CRIT_THR"
+    },
+    {
+      "increment": "0.01",
+      "default": "0.05",
+      "rebootRequired": "true",
+      "min": "0.03",
+      "decimalPlaces": "2",
+      "longDesc": "Sets the threshold when the battery will be reported as dangerously low. This has to be lower than the critical threshold. This threshold commonly will trigger landing.",
+      "max": "0.1",
+      "type": "Float",
+      "units": "norm",
+      "group": "Battery Calibration",
+      "shortDesc": "Emergency threshold",
+      "name": "BAT_EMERGEN_THR"
+    },
+    {
+      "increment": "0.01",
+      "default": "0.15",
+      "rebootRequired": "true",
+      "min": "0.12",
+      "decimalPlaces": "2",
+      "longDesc": "Sets the threshold when the battery will be reported as low. This has to be higher than the critical threshold.",
+      "max": "0.5",
+      "type": "Float",
+      "units": "norm",
+      "group": "Battery Calibration",
+      "shortDesc": "Low threshold",
+      "name": "BAT_LOW_THR"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "units": "S",
+      "group": "Battery Calibration",
+      "rebootRequired": "true",
+      "shortDesc": "This parameter is deprecated. Please use BAT1_N_CELLS instead",
+      "longDesc": "Defines the number of cells the attached battery consists of.",
+      "values": [
+        {
+          "value": "0",
+          "description": "Unconfigured"
+        },
+        {
+          "value": "2",
+          "description": "2S Battery"
+        },
+        {
+          "value": "3",
+          "description": "3S Battery"
+        },
+        {
+          "value": "4",
+          "description": "4S Battery"
+        },
+        {
+          "value": "5",
+          "description": "5S Battery"
+        },
+        {
+          "value": "6",
+          "description": "6S Battery"
+        },
+        {
+          "value": "7",
+          "description": "7S Battery"
+        },
+        {
+          "value": "8",
+          "description": "8S Battery"
+        },
+        {
+          "value": "9",
+          "description": "9S Battery"
+        },
+        {
+          "value": "10",
+          "description": "10S Battery"
+        },
+        {
+          "value": "11",
+          "description": "11S Battery"
+        },
+        {
+          "value": "12",
+          "description": "12S Battery"
+        },
+        {
+          "value": "13",
+          "description": "13S Battery"
+        },
+        {
+          "value": "14",
+          "description": "14S Battery"
+        },
+        {
+          "value": "15",
+          "description": "15S Battery"
+        },
+        {
+          "value": "16",
+          "description": "16S Battery"
+        }
+      ],
+      "name": "BAT_N_CELLS"
+    },
+    {
+      "default": "-1.0",
+      "type": "Float",
+      "max": "0.2",
+      "min": "-1.0",
+      "group": "Battery Calibration",
+      "rebootRequired": "true",
+      "shortDesc": "This parameter is deprecated. Please use BAT1_R_INTERNAL instead",
+      "longDesc": "If non-negative, then this will be used in place of BAT_V_LOAD_DROP for all calculations.",
+      "name": "BAT_R_INTERNAL",
+      "units": "Ohms"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "1",
+      "min": "0",
+      "group": "Battery Calibration",
+      "shortDesc": "This parameter is deprecated. Please use BAT1_SOURCE instead",
+      "longDesc": "Battery monitoring source. This parameter controls the source of battery data. The value 'Power Module' means that measurements are expected to come from a power module. If the value is set to 'External' then the system expects to receive mavlink battery status messages.",
+      "values": [
+        {
+          "value": "0",
+          "description": "Power Module"
+        },
+        {
+          "value": "1",
+          "description": "External"
+        }
+      ],
+      "name": "BAT_SOURCE"
+    },
+    {
+      "increment": "0.01",
+      "default": "4.05",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "rebootRequired": "true",
+      "shortDesc": "This parameter is deprecated. Please use BAT1_V_CHARGED instead",
+      "longDesc": "Defines the voltage where a single cell of battery 1 is considered full under a mild load. This will never be the nominal voltage of 4.2V",
+      "decimalPlaces": "2",
+      "name": "BAT_V_CHARGED"
+    },
+    {
+      "increment": "0.01",
+      "default": "3.5",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "rebootRequired": "true",
+      "shortDesc": "This parameter is deprecated. Please use BAT1_V_EMPTY instead",
+      "longDesc": "Defines the voltage where a single cell of battery 1 is considered empty. The voltage should be chosen before the steep dropoff to 2.8V. A typical lithium battery can only be discharged down to 10% before it drops off to a voltage level damaging the cells.",
+      "decimalPlaces": "2",
+      "name": "BAT_V_EMPTY"
+    },
+    {
+      "increment": "0.01",
+      "default": "0.3",
+      "rebootRequired": "true",
+      "min": "0.07",
+      "decimalPlaces": "2",
+      "longDesc": "This implicitely defines the internal resistance to maximum current ratio for battery 1 and assumes linearity. A good value to use is the difference between the 5C and 20-25C load. Not used if BAT_R_INTERNAL is set.",
+      "max": "0.5",
+      "type": "Float",
+      "units": "V",
+      "group": "Battery Calibration",
+      "shortDesc": "This parameter is deprecated. Please use BAT1_V_LOAD_DROP instead",
+      "name": "BAT_V_LOAD_DROP"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "162128",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for airspeed sensor",
+      "longDesc": "Setting this parameter to 162128 will disable the check for an airspeed sensor. The sensor driver will not be started and it cannot be calibrated. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_AIRSPD_CHK"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "782097",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for disabling buzzer",
+      "longDesc": "Setting this parameter to 782097 will disable the buzzer audio notification. Setting this parameter to 782090 will disable the startup tune, while keeping all others enabled.",
+      "category": "Developer",
+      "name": "CBRK_BUZZER"
+    },
+    {
+      "default": "284953",
+      "type": "Int32",
+      "max": "284953",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for engine failure detection",
+      "longDesc": "Setting this parameter to 284953 will disable the engine failure detection. If the aircraft is in engine failure mode the engine failure flag will be set to healthy WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_ENGINEFAIL"
+    },
+    {
+      "default": "121212",
+      "type": "Int32",
+      "max": "121212",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for flight termination",
+      "longDesc": "Setting this parameter to 121212 will disable the flight termination action if triggered by the FailureDetector logic or if FMU is lost. This circuit breaker does not affect the RC loss, data link loss, geofence, and takeoff failure detection safety logic.",
+      "category": "Developer",
+      "name": "CBRK_FLIGHTTERM"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "22027",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for IO safety",
+      "longDesc": "Setting this parameter to 22027 will disable IO safety. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_IO_SAFETY"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "140253",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for rate controller output",
+      "longDesc": "Setting this parameter to 140253 will disable the rate controller uORB publication. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_RATE_CTRL"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "894281",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for power supply check",
+      "longDesc": "Setting this parameter to 894281 will disable the power valid checks in the commander. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_SUPPLY_CHK"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "197848",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for USB link check",
+      "longDesc": "Setting this parameter to 197848 will disable the USB connected checks in the commander. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_USB_CHK"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "201607",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for position error check",
+      "longDesc": "Setting this parameter to 201607 will disable the position and velocity accuracy checks in the commander. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_VELPOSERR"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "159753",
+      "min": "0",
+      "group": "Circuit Breaker",
+      "rebootRequired": "true",
+      "shortDesc": "Circuit breaker for arming in fixed-wing mode check",
+      "longDesc": "Setting this parameter to 159753 will enable arming in fixed-wing mode for VTOLs. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK",
+      "category": "Developer",
+      "name": "CBRK_VTOLARMING"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "Mixer Output",
+      "shortDesc": "Multicopter air-mode",
+      "longDesc": "The air-mode enables the mixer to increase the total thrust of the multirotor in order to keep attitude and rate control even at low and high throttle. This function should be disabled during tuning as it will help the controller to diverge if the closed-loop is unstable (i.e. the vehicle is not tuned yet). Enabling air-mode for yaw requires the use of an arming switch.",
+      "values": [
+        {
+          "value": "0",
+          "description": "Disabled"
+        },
+        {
+          "value": "1",
+          "description": "Roll/Pitch"
+        },
+        {
+          "value": "2",
+          "description": "Roll/Pitch/Yaw"
+        }
+      ],
+      "name": "MC_AIRMODE"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "Mixer Output",
+      "shortDesc": "Motor Ordering",
+      "longDesc": "Determines the motor ordering. This can be used for example in combination with a 4-in-1 ESC that assumes a motor ordering which is different from PX4. ONLY supported for Quads. When changing this, make sure to test the motor response without props first.",
+      "values": [
+        {
+          "value": "0",
+          "description": "PX4"
+        },
+        {
+          "value": "1",
+          "description": "Betaflight / Cleanflight"
+        }
+      ],
+      "name": "MOT_ORDERING"
+    },
+    {
+      "default": "0.4",
+      "type": "Float",
+      "max": "1",
+      "min": "0",
+      "group": "Multicopter Position Control",
+      "shortDesc": "Average delay of the range sensor message plus the tracking delay of the position controller in seconds",
+      "longDesc": "Only used in Position mode.",
+      "name": "CP_DELAY",
+      "units": "seconds"
+    },
+    {
+      "default": "-1.0",
+      "type": "Float",
+      "max": "15",
+      "min": "-1",
+      "group": "Multicopter Position Control",
+      "shortDesc": "Minimum distance the vehicle should keep to all obstacles",
+      "longDesc": "Only used in Position mode. Collision avoidance is disabled by setting this parameter to a negative value",
+      "name": "CP_DIST",
+      "units": "meters"
+    },
+    {
+      "default": "0",
+      "type": "Float",
+      "group": "Multicopter Position Control",
+      "shortDesc": "Boolean to allow moving into directions where there is no sensor data (outside FOV)",
+      "longDesc": "Only used in Position mode.",
+      "name": "CP_GO_NO_DATA"
+    },
+    {
+      "default": "30.",
+      "type": "Float",
+      "max": "90",
+      "min": "0",
+      "group": "Multicopter Position Control",
+      "shortDesc": "Angle left/right from the commanded setpoint by which the collision prevention algorithm can choose to change the setpoint direction",
+      "longDesc": "Only used in Position mode.",
+      "name": "CP_GUIDE_ANG",
+      "units": "[deg]"
+    },
+    {
+      "default": "0",
+      "shortDesc": "Enable weathervane",
+      "type": "Int32",
+      "name": "WV_EN",
+      "group": "Multicopter Position Control"
+    },
+    {
+      "default": "1.0",
+      "type": "Float",
+      "max": "5",
+      "group": "Multicopter Position Control",
+      "shortDesc": "Minimum roll angle setpoint for weathervane controller to demand a yaw-rate",
+      "min": "0",
+      "name": "WV_ROLL_MIN",
+      "units": "deg"
+    },
+    {
+      "default": "90.0",
+      "type": "Float",
+      "max": "120",
+      "group": "Multicopter Position Control",
+      "shortDesc": "Maximum yawrate the weathervane controller is allowed to demand",
+      "min": "0",
+      "name": "WV_YRATE_MAX",
+      "units": "deg/s"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "Sensor Calibration",
+      "values": [
+        {
+          "value": "0",
+          "description": "Disabled"
+        },
+        {
+          "value": "1",
+          "description": "Throttle-based compensation"
+        },
+        {
+          "value": "2",
+          "description": "Current-based compensation (battery_status instance 0)"
+        },
+        {
+          "value": "3",
+          "description": "Current-based compensation (battery_status instance 1)"
+        }
+      ],
+      "shortDesc": "Type of magnetometer compensation",
+      "category": "System",
+      "name": "CAL_MAG_COMP_TYP"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "System",
+      "shortDesc": "Automatically configure default values",
+      "longDesc": "Set to 1 to reset parameters on next system startup (setting defaults). Platform-specific values are used if available. RC* parameters are preserved.",
+      "values": [
+        {
+          "value": "0",
+          "description": "Keep parameters"
+        },
+        {
+          "value": "1",
+          "description": "Reset parameters"
+        },
+        {
+          "value": "2",
+          "description": "Reload airframe parameters"
+        }
+      ],
+      "name": "SYS_AUTOCONFIG"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "9999999",
+      "min": "0",
+      "group": "System",
+      "rebootRequired": "true",
+      "shortDesc": "Auto-start script index",
+      "longDesc": "CHANGING THIS VALUE REQUIRES A RESTART. Defines the auto-start script used to bootstrap the system.",
+      "name": "SYS_AUTOSTART"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "System",
+      "rebootRequired": "true",
+      "shortDesc": "Bootloader update",
+      "longDesc": "If enabled, update the bootloader on the next boot. WARNING: do not cut the power during an update process, otherwise you will have to recover using some alternative method (e.g. JTAG). Instructions: - Insert an SD card - Enable this parameter - Reboot the board (plug the power or send a reboot command) - Wait until the board comes back up (or at least 2 minutes) - If it does not come back, check the file bootlog.txt on the SD card",
+      "name": "SYS_BL_UPDATE"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "1",
+      "min": "0",
+      "group": "System",
+      "shortDesc": "Enable auto start of accelerometer thermal calibration at the next power up",
+      "longDesc": "0 : Set to 0 to do nothing 1 : Set to 1 to start a calibration at next boot This parameter is reset to zero when the the temperature calibration starts. default (0, no calibration)",
+      "name": "SYS_CAL_ACCEL"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "1",
+      "min": "0",
+      "group": "System",
+      "shortDesc": "Enable auto start of barometer thermal calibration at the next power up",
+      "longDesc": "0 : Set to 0 to do nothing 1 : Set to 1 to start a calibration at next boot This parameter is reset to zero when the the temperature calibration starts. default (0, no calibration)",
+      "name": "SYS_CAL_BARO"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "max": "1",
+      "min": "0",
+      "group": "System",
+      "shortDesc": "Enable auto start of rate gyro thermal calibration at the next power up",
+      "longDesc": "0 : Set to 0 to do nothing 1 : Set to 1 to start a calibration at next boot This parameter is reset to zero when the the temperature calibration starts. default (0, no calibration)",
+      "name": "SYS_CAL_GYRO"
+    },
+    {
+      "default": "24",
+      "type": "Int32",
+      "units": "deg C",
+      "min": "10",
+      "group": "System",
+      "shortDesc": "Required temperature rise during thermal calibration",
+      "longDesc": "A temperature increase greater than this value is required during calibration. Calibration will complete for each sensor when the temperature increase above the starting temeprature exceeds the value set by SYS_CAL_TDEL. If the temperature rise is insufficient, the calibration will continue indefinitely and the board will need to be repowered to exit.",
+      "name": "SYS_CAL_TDEL"
+    },
+    {
+      "default": "10",
+      "type": "Int32",
+      "units": "deg C",
+      "group": "System",
+      "shortDesc": "Maximum starting temperature for thermal calibration",
+      "longDesc": "Temperature calibration will not start if the temperature of any sensor is higher than the value set by SYS_CAL_TMAX.",
+      "name": "SYS_CAL_TMAX"
+    },
+    {
+      "default": "5",
+      "type": "Int32",
+      "units": "deg C",
+      "group": "System",
+      "shortDesc": "Minimum starting temperature for thermal calibration",
+      "longDesc": "Temperature calibration for each sensor will ignore data if the temperature is lower than the value set by SYS_CAL_TMIN.",
+      "name": "SYS_CAL_TMIN"
+    },
+    {
+      "default": "1",
+      "type": "Int32",
+      "group": "System",
+      "rebootRequired": "true",
+      "shortDesc": "Control if the vehicle has a barometer",
+      "longDesc": "Disable this if the board has no barometer, such as some of the the Omnibus F4 SD variants. If disabled, the preflight checks will not check for the presence of a barometer.",
+      "name": "SYS_HAS_BARO"
+    },
+    {
+      "default": "1",
+      "type": "Int32",
+      "group": "System",
+      "rebootRequired": "true",
+      "shortDesc": "Control if the vehicle has a magnetometer",
+      "longDesc": "Disable this if the board has no magnetometer, such as the Omnibus F4 SD. If disabled, the preflight checks will not check for the presence of a magnetometer.",
+      "name": "SYS_HAS_MAG"
+    },
+    {
+      "default": "0",
+      "type": "Int32",
+      "group": "System",
+      "rebootRequired": "true",
+      "shortDesc": "Enable HITL/SIH mode on next boot",
+      "longDesc": "While enabled the system will boot in Hardware-In-The-Loop (HITL) or Simulation-In-Hardware (SIH) mode and not enable all sensors and checks. When disabled the same vehicle can be flown normally. Set to 'external HITL', if the system should perform as if it were a real vehicle (the only difference to a real system is then only the parameter value, which can be used for log analysis).",
+      "values": [
+        {
+          "value": "-1",
+          "description": "external HITL"
+        },
+        {
+          "value": "0",
+          "description": "HITL and SIH disabled"
+        },
+        {
+          "value": "1",
+          "description": "HITL enabled"
+        },
+        {
+          "value": "2",
+          "description": "SIH enabled"
+        }
+      ],
+      "name": "SYS_HITL"
+    },
+    {
+      "default": "2",
+      "type": "Int32",
+      "group": "System",
+      "rebootRequired": "true",
+      "shortDesc": "Set multicopter estimator group",
+      "longDesc": "Set the group of estimators used for multicopters and VTOLs",
+      "values": [
+        {
+          "value": "1",
+          "description": "local_position_estimator, attitude_estimator_q (unsupported)"
+        },
+        {
+          "value": "2",
+          "description": "ekf2 (recommended)"
+        },
+        {
+          "value": "3",
+          "description": "Q attitude estimator (no position)"
+        }
+      ],
+      "name": "SYS_MC_EST_GROUP"
+    },
+    {
+      "default": "1",
+      "type": "Int32",
+      "min": "0",
+      "group": "System",
+      "shortDesc": "Parameter version",
+      "longDesc": "This is used internally only: an airframe configuration might set an expected parameter version value via PARAM_DEFAULTS_VER. This is checked on bootup against SYS_PARAM_VER, and if they do not match, parameters from the airframe configuration are reloaded.",
+      "name": "SYS_PARAM_VER"
+    },
+    {
+      "longDesc": "Set by px4io to indicate type of restart",
+      "default": "2",
+      "type": "Int32",
+      "max": "2",
+      "min": "0",
+      "group": "System",
+      "values": [
+        {
+          "value": "0",
+          "description": "Data survives resets"
+        },
+        {
+          "value": "1",
+          "description": "Data survives in-flight resets only"
+        },
+        {
+          "value": "2",
+          "description": "Data does not survive reset"
+        }
+      ],
+      "shortDesc": "Set restart type",
+      "volatile": "true",
+      "category": "System",
+      "name": "SYS_RESTART_TYPE"
+    },
+    {
+      "increment": "0.01",
+      "default": "1.0",
+      "type": "Float",
+      "max": "3.0",
+      "min": "0.0",
+      "group": "VTOL Attitude Control",
+      "shortDesc": "Weather-vane roll angle to yawrate",
+      "longDesc": "The desired gain to convert roll sp into yaw rate sp.",
+      "decimalPlaces": "3",
+      "name": "WV_GAIN",
+      "units": "1/s"
+    }
+  ],
+  "version": 1,
+  "scope": "Firmware",
+  "uid": 1
+}

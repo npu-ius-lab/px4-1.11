@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/src/drivers/px4io/CMakeFiles/px4io_firmware"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/src/drivers/px4io/CMakeFiles/px4io_firmware.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/src/drivers/px4io/CMakeFiles/px4io_firmware-complete.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Stamp/px4io_firmware/px4io_firmware-install.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Stamp/px4io_firmware/px4io_firmware-mkdir.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Stamp/px4io_firmware/px4io_firmware-download.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Stamp/px4io_firmware/px4io_firmware-update.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Stamp/px4io_firmware/px4io_firmware-patch.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Stamp/px4io_firmware/px4io_firmware-configure.rule"
+		},
+		{
+			"file" : "/home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Stamp/px4io_firmware/px4io_firmware-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"px4io_firmware"
+		],
+		"name" : "px4io_firmware"
+	}
+}

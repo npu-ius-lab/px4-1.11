@@ -1,0 +1,13 @@
+Create .version
+Create version.h
+LN: include/arch to arch/arm/include
+LN: include/arch/board to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/NuttX/nuttx/../nuttx-config//include
+LN: include/arch/chip to arch/arm/include/stm32f7
+LN: arch/arm/src/board to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/NuttX/nuttx/../nuttx-config//src
+LN: arch/arm/src/chip to arch/arm/src/stm32f7
+LN: /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/NuttX/nuttx/drivers/platform to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/NuttX/nuttx/../nuttx-config/drivers
+LN: platform/board to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/NuttX/apps/platform/dummy
+Register: nsh
+Register: sercon
+Register: serdis
+LN: platform/board to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/NuttX/apps/platform/dummy

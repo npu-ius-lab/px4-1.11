@@ -1,0 +1,9 @@
+Create .version
+LN: include/arch to arch/arm/include
+LN: include/arch/board to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Build/px4io_firmware/NuttX/nuttx/../nuttx-config//include
+LN: include/arch/chip to arch/arm/include/stm32
+LN: arch/arm/src/board to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Build/px4io_firmware/NuttX/nuttx/../nuttx-config//src
+LN: arch/arm/src/chip to arch/arm/src/stm32
+LN: /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Build/px4io_firmware/NuttX/nuttx/drivers/platform to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Build/px4io_firmware/NuttX/nuttx/../nuttx-config/drivers
+LN: platform/board to /home/dtpmh/PX4-Autopilot_1.11/build/px4_fmu-v5_default/external/Build/px4io_firmware/NuttX/apps/platform/dummy
+DEBUG: kconfiglib kconfig-conf wrapper, arguments: --olddefconfig Kconfig
